@@ -1,0 +1,94 @@
+# Builds the site and publishes it to GitHub Pages on every push to main.
+#
+# One-time setup in the repository: Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
+#
+# Optional repository variables (Settings -> Secrets and variables -> Actions -> Variables):
+#   VITE_FORMSPREE_ENDPOINT  https://formspree.io/f/xxxxxxx   contact form posts here instead of opening a mail app
+#   VITE_BASE                /                                 only for a custom domain
+#   VITE_SITE_URL            https://yourdomain.com/           only for a custom domain
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: portfolio
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Work out where the site will live
+        id: site
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          BASE_OVERRIDE: ${{ vars.VITE_BASE }}
+          URL_OVERRIDE: ${{ vars.VITE_SITE_URL }}
+        run: |
+          owner="${OWNER,,}"
+          if [ "${REPO,,}" = "$owner.github.io" ]; then
+            # A user site: https://<username>.github.io/
+            base="/"
+            url="https://$owner.github.io/"
+          else
+            # A project site: https://<username>.github.io/<repo>/
+            base="/$REPO/"
+            url="https://$owner.github.io/$REPO/"
+          fi
+          base="${BASE_OVERRIDE:-$base}"
+          url="${URL_OVERRIDE:-$url}"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Base path: $base"
+          echo "Site URL:  $url"
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_BASE: ${{ steps.site.outputs.base }}
+          VITE_SITE_URL: ${{ steps.site.outputs.url }}
+          VITE_FORMSPREE_ENDPOINT: ${{ vars.VITE_FORMSPREE_ENDPOINT }}
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: portfolio/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
