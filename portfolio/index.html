@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Om Bharadwaj | Software engineer and applied AI developer</title>
+    <meta
+      name="description"
+      content="Portfolio of Om Bharadwaj, a computer science student at IIIT Manipur. Full-stack engineering, applied machine learning, and explainable AI."
+    />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f1f3f7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0f1c" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Om Bharadwaj | Software engineer and applied AI developer" />
+    <meta
+      property="og:description"
+      content="Full-stack engineering, applied machine learning, and explainable AI. CSE (AI & Data Science) at IIIT Manipur."
+    />
+
+    <!-- site-url:start -->
+    <link rel="canonical" href="__SITE_URL__" />
+    <meta property="og:url" content="__SITE_URL__" />
+    <meta property="og:image" content="__SITE_URL__og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Om Bharadwaj, software engineer and applied AI developer, in large type lit by a heat-map glow." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="__SITE_URL__og.png" />
+    <!-- site-url:end -->
+
+    <!-- Apply the saved (or system) theme before first paint so there is no flash. -->
+    <script>
+      try {
+        var saved = localStorage.getItem('ob-theme')
+        var theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        if (theme === 'dark') document.documentElement.classList.add('dark')
+      } catch (e) {}
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Om Bharadwaj",
+        "jobTitle": "Software engineer and applied AI developer",
+        "alumniOf": "Indian Institute of Information Technology Manipur",
+        "sameAs": [
+          "https://github.com/Poseidon994",
+          "https://linkedin.com/in/om-bharadwaj-916b802a5"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: system-ui, sans-serif">
+        Om Bharadwaj, software engineer and applied AI developer. This site needs JavaScript. Email:
+        bharadwajom07@gmail.com
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

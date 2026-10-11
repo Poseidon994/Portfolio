@@ -1,0 +1,601 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Design rule: the interface is cool, attention is hot.
+  Blue-grey surfaces and one ultramarine accent for everything interactive.
+  The warm heat ramp appears only where something is being attended to:
+  the hero attention map, the Grad-CAM overlay, the solar peak, pointer glows.
+*/
+:root {
+  color-scheme: light;
+  --film: #f1f3f7;
+  --sheet: #ffffff;
+  --ink: #0c1222;
+  --graphite: #4b5568;
+  --rule: #d9dee8;
+  --edge: #7d879b;
+  --accent: #2a3be8;
+  --accent-ink: #ffffff;
+
+  --solid-bg: #0c1222;
+  --solid-fg: #eef1f8;
+  --solid-mute: #a3aec4;
+  --solid-rule: #27324d;
+
+  /* Heat ramp: lightness rises monotonically from violet to amber. */
+  --heat-0: #3b2e9e;
+  --heat-1: #b2307f;
+  --heat-2: #f4663b;
+  --heat-3: #ffc94d;
+
+  --danger: #c0321f;
+
+  /* Name glyphs: amber is unreadable on a light page, so light mode stops at red-orange. */
+  --glyph-hot: #e8451e;
+  --glyph-mid: #b2307f;
+  --glyph-cool: #3b2e9e;
+}
+
+.dark {
+  color-scheme: dark;
+  --film: #0a0f1c;
+  --sheet: #121a2c;
+  --ink: #eef1f8;
+  --graphite: #9aa5ba;
+  --rule: #243049;
+  --edge: #6c7794;
+  --accent: #8f9bff;
+  --accent-ink: #0a0f1c;
+
+  --solid-bg: #1b2550;
+  --solid-fg: #eef1f8;
+  --solid-mute: #aab5d6;
+  --solid-rule: #33407a;
+
+  --heat-0: #5a49d0;
+  --heat-1: #c43a8f;
+  --heat-2: #ff7a45;
+  --heat-3: #ffd25e;
+
+  --danger: #ff8a73;
+
+  --glyph-hot: #ffd25e;
+  --glyph-mid: #ff7a45;
+  --glyph-cool: #c43a8f;
+}
+
+@theme inline {
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-film: var(--film);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-solid-bg: var(--solid-bg);
+  --color-solid-fg: var(--solid-fg);
+  --color-solid-mute: var(--solid-mute);
+  --color-solid-rule: var(--solid-rule);
+  --color-heat-0: var(--heat-0);
+  --color-heat-1: var(--heat-1);
+  --color-heat-2: var(--heat-2);
+  --color-heat-3: var(--heat-3);
+  --color-danger: var(--danger);
+
+  --radius-tile: 1.25rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--film);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  button:not(:disabled),
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--rule);
+    border-radius: 10px;
+    border: 2px solid var(--film);
+  }
+}
+
+@layer components {
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    border-radius: 9999px;
+    background: var(--ink);
+    color: var(--film);
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* Type: one family. The width axis does the work: condensed and heavy for display. */
+  .wordmark {
+    font-stretch: 80%;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+  }
+
+  .h-section {
+    font-stretch: 75%;
+    font-weight: 800;
+    letter-spacing: -0.012em;
+    line-height: 0.95;
+    font-size: clamp(2.9rem, 8vw, 6.75rem);
+  }
+
+  .h-tile {
+    font-stretch: 78%;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+  }
+
+  .h-sub {
+    font-stretch: 85%;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    font-size: 1.5rem;
+  }
+
+  .figure {
+    font-stretch: 75%;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reveal mask: extra bottom room so descenders (the j in Bharadwaj) are never clipped. */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding: 0.06em 0.05em 0.26em;
+    margin: -0.06em -0.05em -0.26em;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.85rem 1.4rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.35s;
+  }
+  .btn-solid {
+    background: var(--ink);
+    color: var(--film);
+  }
+  .btn-solid:hover,
+  .btn-solid:focus-visible {
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--heat-2) 26%, transparent),
+      0 10px 34px -8px color-mix(in oklab, var(--heat-2) 65%, transparent);
+  }
+  .btn-line {
+    border: 1px solid var(--rule);
+    color: var(--ink);
+  }
+  .btn-line:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    border-radius: 9999px;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  }
+  .icon-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block: 0.7rem;
+    margin-block: -0.7rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.3em;
+    text-decoration-thickness: 2px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+  .text-link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  /* Chips */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--rule);
+    border-radius: 9999px;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.35rem;
+    color: var(--graphite);
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+
+  /* Bento tile. The glow follows the pointer: hovering is attending, so it runs warm. */
+  .tile {
+    position: relative;
+    overflow: clip;
+    border-radius: var(--radius-tile);
+    border: 1px solid var(--rule);
+    background: var(--sheet);
+  }
+  .tile-solid {
+    background: var(--solid-bg);
+    color: var(--solid-fg);
+    border-color: transparent;
+  }
+  .tile-accent {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+  }
+  .tile-spot {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+    background: radial-gradient(
+      300px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--heat-2) 17%, transparent),
+      transparent 70%
+    );
+  }
+  .tile:hover .tile-spot {
+    opacity: 1;
+  }
+
+  .bullets > li {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+  .bullets > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  /* Hero name. Font size is fitted to the container so "Bharadwaj" spans the full width. */
+  .name-wrap {
+    container-type: inline-size;
+    --fit: 3.42;
+  }
+  .name-line {
+    /* Fill the width, but never let the name outgrow a short viewport. */
+    font-size: min(calc(100cqw / var(--fit)), 36svh);
+    font-stretch: 75%;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.88;
+  }
+
+  /* A halo in the page colour keeps the letters legible when bright cells pass behind them.
+     Stroke is painted first, then the fill, so the halo only shows outside the glyphs. */
+  .name-solid {
+    -webkit-text-stroke: 0.07em var(--film);
+    paint-order: stroke fill;
+  }
+
+  /* Hero: heat painted onto the glyphs of the name, centred on the attention point. */
+  .glyph-heat {
+    --heat-r: 240px;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    color: transparent;
+    background-image: radial-gradient(
+      circle var(--heat-r, 240px) at var(--lx, -999px) var(--ly, -999px),
+      var(--glyph-hot) 0%,
+      var(--glyph-mid) 36%,
+      var(--glyph-cool) 68%,
+      transparent 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  @media (max-width: 640px) {
+    .glyph-heat {
+      --heat-r: 130px;
+    }
+  }
+
+  /* Cohort unit chart: one cell per student, the top 4% lit. */
+  .cohort {
+    display: grid;
+    gap: 3px;
+  }
+  .cohort-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: var(--solid-rule);
+  }
+  .cohort-cell.is-lit {
+    background: var(--heat-3);
+    box-shadow: 0 0 12px color-mix(in oklab, var(--heat-2) 70%, transparent);
+    transform: scale(0.4);
+    opacity: 0.25;
+    transition:
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 90ms),
+      opacity 0.6s calc(var(--i) * 90ms);
+  }
+  .cohort.is-on .cohort-cell.is-lit {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Experience: a request travels down the stack and the response comes back up. */
+  .track {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--rule);
+  }
+  .packet {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    border-radius: 9999px;
+    opacity: 0;
+  }
+  .packet-down {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent);
+    animation: packet-down 3.6s ease-in-out infinite;
+  }
+  .packet-up {
+    background: var(--heat-2);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--heat-2) 28%, transparent);
+    animation: packet-up 3.6s ease-in-out infinite;
+  }
+
+  /* Pipeline stepper */
+  .step-dot {
+    border: 2px solid var(--rule);
+    background: var(--film);
+    transition: background-color 0.4s calc(var(--i) * 140ms), border-color 0.4s calc(var(--i) * 140ms);
+  }
+  .pipeline.is-on .step-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Transparent range input laid over an illustration so it is draggable and keyboard friendly. */
+  .scrub {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
+  .scrub::-webkit-slider-runnable-track {
+    height: 100%;
+    background: transparent;
+  }
+  .scrub::-moz-range-track {
+    height: 100%;
+    background: transparent;
+  }
+  .scrub::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2px;
+    height: 100%;
+  }
+  .scrub::-moz-range-thumb {
+    width: 2px;
+    height: 100%;
+    border: 0;
+  }
+  .scrub-frame:has(.scrub:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .seg button {
+    border-radius: 9999px;
+    padding: 0.6rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--graphite);
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .seg button:hover {
+    color: var(--ink);
+  }
+  .seg button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--film);
+  }
+
+  .field {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--edge);
+    background: transparent;
+    padding: 0.55rem 0;
+    font: inherit;
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .field::placeholder {
+    color: color-mix(in oklab, var(--graphite) 85%, transparent);
+  }
+  .field:hover {
+    border-color: var(--graphite);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 1px 0 0 var(--accent);
+  }
+}
+
+@keyframes packet-down {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  44% {
+    top: calc(100% - 10px);
+    opacity: 1;
+  }
+  50%,
+  100% {
+    top: calc(100% - 10px);
+    opacity: 0;
+  }
+}
+
+@keyframes packet-up {
+  0%,
+  50% {
+    top: calc(100% - 10px);
+    opacity: 0;
+  }
+  56% {
+    opacity: 1;
+  }
+  94% {
+    top: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0;
+    opacity: 0;
+  }
+}
+
+/* Theme switch: a circular reveal from the toggle (see useTheme). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  .packet {
+    display: none;
+  }
+}
