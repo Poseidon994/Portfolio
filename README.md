@@ -4,15 +4,17 @@ A single-page portfolio built from my résumé. React 18, Vite 6, Tailwind CSS v
 
 ## What is on the page
 
-- **Hero:** an interactive attention map. A Grad-CAM-style heat field runs across a grid of cells and is painted onto the letters of the name. Move, tap or drag to steer it.
-- **About:** education, CGPA 9.05 with a 228-cell unit chart (the top 4% lit), and skills.
+- **Hero:** an interactive attention map. A Grad-CAM-style heat field runs across a grid of cells and is painted onto the letters of the name. Move, tap or drag to steer it. Links to GitHub, LinkedIn, Kaggle and LeetCode sit under the intro.
+- **About:** education, CGPA 9.05 with a 100-cell unit chart (each cell is 1% of the cohort, the top 5% lit), and skills.
 - **Experience:** the Tata Technologies CRM portal drawn as a three-layer stack (React, PHP, MySQL).
-- **Projects:** the retinopathy and solar-power systems, with a draggable Grad-CAM overlay and a solar-output curve you can scrub. Both are labelled as illustrations, not real data.
+- **Projects:** Ocula (diabetic retinopathy), Cutis (skin lesions) and the solar-power model. Each has an interactive picture: a draggable Grad-CAM overlay, a two-stage cascade with a leakage-audit chart, and a solar-output curve you can scrub. The retina, cascade and solar pictures are labelled as illustrations, not real data. The leakage bars use the two figures from the résumé.
 - **Community:** GDG On Campus chapter lead and GeeksforGeeks campus ambassador.
-- **Contact:** copy-email button and a message form.
+- **Contact:** copy-email button, links to GitHub, LinkedIn, Kaggle and LeetCode, and a message form.
 - Light and dark themes (remembered), keyboard and screen-reader friendly, and reduced-motion is respected.
 
 ## Run it locally
+
+Run these inside the folder that contains `package.json`.
 
 ```bash
 npm install
@@ -35,7 +37,7 @@ Needs Node 20 or newer (22 recommended).
 1. **Create the repository** on GitHub. The name decides the address:
    - `Poseidon994.github.io` gives `https://poseidon994.github.io/`
    - any other name, for example `portfolio`, gives `https://poseidon994.github.io/portfolio/`
-2. **Push the code:**
+2. **Push the code.** Run this inside the folder that contains `package.json`. `package.json` and the `.github` folder must sit at the top of the repository, not inside a subfolder, or the workflow will not run.
    ```bash
    git init
    git add .
@@ -60,7 +62,8 @@ GitHub Pages has no server, so the form has two modes:
 
 ## Before you share the link
 
-- [ ] Both "View on GitHub" buttons point at your GitHub profile, because the résumé links do. In `src/data/profile.js`, set `repo` on each project to the exact repository address.
+- [ ] "View on GitHub" shows on Ocula and Cutis, linked to their repositories. Solar has no `repo` on purpose, so it has no button. Add a `repo` in `src/data/profile.js` to show one.
+- [ ] Solar is not on the latest résumé. It stays on the site because that was the choice. Delete its entry in `src/data/profile.js` to remove it.
 - [ ] Check that the résumé PDF is the current one.
 
 ## Project layout
@@ -68,8 +71,9 @@ GitHub Pages has no server, so the form has two modes:
 ```
 src/
   data/profile.js       all site content
-  components/           Hero, About, Experience, Projects, Community, Contact, Nav, Footer, ...
+  components/           Hero, About, Experience, Projects, Community, Contact, Nav, Footer, the project pictures, ...
   hooks/                useHeatField (hero canvas), useTheme, useActiveSection
+  lib/random.js         seeded random numbers for the illustrations
   index.css             design tokens and component styles
 public/                 résumé PDF, favicon, share image
 .github/workflows/      GitHub Pages deploy

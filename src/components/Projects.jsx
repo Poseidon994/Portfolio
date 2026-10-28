@@ -4,11 +4,13 @@ import { ArrowUpRight } from 'lucide-react'
 import SectionTitle from './SectionTitle'
 import Tile from './Tile'
 import RetinaMap from './RetinaMap'
+import CutisPanel from './CutisPanel'
 import SolarDay from './SolarDay'
 import { projects } from '../data/profile'
 
 const VISUALS = {
   retinopathy: RetinaMap,
+  cutis: CutisPanel,
   solar: SolarDay,
 }
 
@@ -36,14 +38,41 @@ function Pipeline({ steps }) {
   )
 }
 
+// Headline numbers, as rows: the number on the left, what it measures on the right.
+function Metrics({ items }) {
+  return (
+    <dl className="mt-7 divide-y divide-rule border-y border-rule">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className="grid grid-cols-[6rem_1fr] items-center gap-x-4 py-3.5 sm:grid-cols-[7rem_1fr] sm:gap-x-5"
+        >
+          <dt className="col-start-2 row-start-1 text-[0.9375rem] leading-snug text-graphite">{item.label}</dt>
+          <dd className="figure col-start-1 row-start-1 text-[1.75rem] sm:text-[2.125rem]">{item.value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
 function Project({ project }) {
   const Visual = VISUALS[project.id]
 
   return (
     <Tile as="article" className="grid md:grid-cols-[1.12fr_1fr]" innerClassName="contents">
       <div className="relative z-[1] p-7 md:p-10">
-        <h3 className="h-tile max-w-[16ch]">{project.title}</h3>
+        <h3 className="h-tile max-w-[16ch]">
+          {project.name && (
+            <span className="eyebrow">
+              {project.name}
+              <span className="sr-only">: </span>
+            </span>
+          )}
+          {project.title}
+        </h3>
         <p className="mt-5 max-w-[50ch] text-[1.0625rem] leading-relaxed text-graphite">{project.summary}</p>
+
+        {project.metrics && <Metrics items={project.metrics} />}
 
         <ul className="bullets mt-8 space-y-3.5 text-[0.9688rem] leading-relaxed">
           {project.highlights.map((point) => (
@@ -59,9 +88,11 @@ function Project({ project }) {
           ))}
         </ul>
 
-        <a href={project.repo} target="_blank" rel="noopener" className="text-link mt-8">
-          View on GitHub <ArrowUpRight size={16} aria-hidden="true" />
-        </a>
+        {project.repo && (
+          <a href={project.repo} target="_blank" rel="noopener" className="text-link mt-8">
+            View on GitHub <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        )}
       </div>
 
       <div className="relative z-[1] border-t border-rule bg-film md:border-l md:border-t-0">
@@ -81,7 +112,7 @@ export default function Projects() {
       aria-labelledby="projects-title"
       className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-36"
     >
-      <SectionTitle id="projects-title" lines={['Two AI systems,', 'shipped as APIs.']} />
+      <SectionTitle id="projects-title" lines={['Three AI systems,', 'shipped as APIs.']} />
       <div className="mt-12 flex flex-col gap-6 md:mt-16">
         {projects.map((project) => (
           <Project key={project.id} project={project} />

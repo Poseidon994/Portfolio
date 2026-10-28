@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { FileText, Github, Linkedin, Mail } from 'lucide-react'
+import { ArrowUpRight, FileText } from 'lucide-react'
 import { profile } from '../data/profile'
 import { useHeatField } from '../hooks/useHeatField'
 
@@ -33,10 +33,12 @@ function NameLine({ text, index, reduce, heatRefs, className = '' }) {
   )
 }
 
-const SOCIALS = [
-  { Icon: Github, label: 'GitHub', href: profile.links.github },
-  { Icon: Linkedin, label: 'LinkedIn', href: profile.links.linkedin },
-  { Icon: Mail, label: 'Email', href: `mailto:${profile.email}` },
+// Text labels, not logos: each one says which site it opens.
+const PROFILES = [
+  { label: 'GitHub', href: profile.links.github },
+  { label: 'LinkedIn', href: profile.links.linkedin },
+  { label: 'Kaggle', href: profile.links.kaggle },
+  { label: 'LeetCode', href: profile.links.leetcode },
 ]
 
 export default function Hero() {
@@ -91,21 +93,21 @@ export default function Hero() {
                 <a href={profile.links.resume} target="_blank" rel="noopener" className="btn btn-line">
                   <FileText size={16} aria-hidden="true" /> Resume
                 </a>
-                <ul className="flex items-center gap-2">
-                  {SOCIALS.map(({ Icon, label, href }) => (
-                    <li key={label}>
-                      <a
-                        href={href}
-                        aria-label={label}
-                        className="icon-btn"
-                        {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
-                      >
-                        <Icon size={18} />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               </div>
+              <ul aria-label="Profiles" className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+                {PROFILES.map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} target="_blank" rel="noopener" className="text-link">
+                      {label} <ArrowUpRight size={16} aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href={`mailto:${profile.email}`} className="text-link">
+                    Email
+                  </a>
+                </li>
+              </ul>
             </motion.div>
           </div>
         </motion.div>

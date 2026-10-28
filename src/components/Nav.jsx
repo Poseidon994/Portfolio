@@ -56,7 +56,7 @@ export default function Nav({ theme, onToggleTheme }) {
             {profile.name}
           </a>
 
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {SECTIONS.map((s) => (
               <li key={s.id}>
                 <a
@@ -97,7 +97,7 @@ export default function Nav({ theme, onToggleTheme }) {
             <button
               ref={toggleRef}
               type="button"
-              className="icon-btn md:hidden"
+              className="icon-btn lg:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -118,7 +118,7 @@ export default function Nav({ theme, onToggleTheme }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 top-full max-h-[calc(100svh-4.25rem)] overflow-y-auto border-b border-rule bg-film shadow-xl md:hidden"
+              className="absolute inset-x-0 top-full max-h-[calc(100svh-4.25rem)] overflow-y-auto border-b border-rule bg-film shadow-xl lg:hidden"
             >
               <ul className="mx-auto flex max-w-6xl flex-col px-6 py-3">
                 {SECTIONS.map((s) => (

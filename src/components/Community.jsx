@@ -49,7 +49,18 @@ export default function Community() {
             <h3 className="h-sub">{gfg.title}</h3>
             <p className="mt-1 text-graphite">{gfg.org}</p>
           </div>
-          <p className="text-[1.0625rem] leading-relaxed text-graphite">{gfg.body}</p>
+          <p className="text-[1.0625rem] leading-relaxed text-graphite">
+            {gfg.body}{' '}
+            <a
+              href={gfg.link.href}
+              target="_blank"
+              rel="noopener"
+              className="font-semibold text-ink underline decoration-rule decoration-2 underline-offset-[0.25em] transition-colors hover:text-accent hover:decoration-current"
+            >
+              {gfg.link.label}
+            </a>
+            .
+          </p>
         </Tile>
       </div>
     </section>

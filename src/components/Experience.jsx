@@ -16,7 +16,7 @@ export default function Experience() {
           <div>
             <h3 className="h-tile">{experience.role}</h3>
             <p className="mt-2 text-lg text-graphite">
-              {experience.company}, {experience.place.toLowerCase()}
+              {experience.company}, {experience.place}
             </p>
           </div>
           <p className="text-graphite">{experience.period}</p>

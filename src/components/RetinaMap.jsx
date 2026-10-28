@@ -1,21 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { animate, useInView, useReducedMotion } from 'framer-motion'
+import { mulberry32 } from '../lib/random'
 
 /*
   An illustration of a retinal image and its Grad-CAM attention overlay.
   It is drawn in code (monochrome, like a green-channel fundus photo) and is NOT a real scan.
   Drag across it, use the arrow keys, or press the buttons to wipe the overlay in and out.
 */
-
-function mulberry32(seed) {
-  let a = seed
-  return () => {
-    a = (a + 0x6d2b79f5) | 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
-}
 
 const DISC = { x: 118, y: 196 }
 

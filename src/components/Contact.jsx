@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Check, Copy, Github, Linkedin } from 'lucide-react'
+import { Braces, Check, ChartColumn, Copy, Github, Linkedin, MapPin } from 'lucide-react'
 import SectionTitle from './SectionTitle'
 import Tile from './Tile'
 import { profile } from '../data/profile'
@@ -109,10 +109,19 @@ export default function Contact() {
             <a href={profile.links.linkedin} target="_blank" rel="noopener" className="btn btn-line">
               <Linkedin size={16} aria-hidden="true" /> LinkedIn
             </a>
+            <a href={profile.links.kaggle} target="_blank" rel="noopener" className="btn btn-line">
+              <ChartColumn size={16} aria-hidden="true" /> Kaggle
+            </a>
+            <a href={profile.links.leetcode} target="_blank" rel="noopener" className="btn btn-line">
+              <Braces size={16} aria-hidden="true" /> LeetCode
+            </a>
           </div>
           <p role="status" aria-live="polite" className={copyFailed ? 'mt-3 text-sm text-danger' : 'sr-only'}>
             {copied ? 'Email address copied.' : ''}
             {copyFailed ? 'Copying did not work. Select the address above and copy it.' : ''}
+          </p>
+          <p className="mt-6 flex items-center gap-2 text-graphite">
+            <MapPin size={16} aria-hidden="true" /> {profile.location}
           </p>
         </div>
 

@@ -5,10 +5,10 @@ import Tile from './Tile'
 import CountUp from './CountUp'
 import { about, skillGroups } from '../data/profile'
 
-// One cell per student in the 228-student cohort. The top 4% (about 9 students) are lit.
-const COHORT = 228
-const TOP_4_PERCENT = Math.round(COHORT * 0.04)
-const COLUMNS = 19
+// One cell per percent of the cohort. The top 5% are lit.
+const CELLS = 100
+const TOP_PERCENT = 5
+const COLUMNS = 10
 
 function CohortChart() {
   const ref = useRef(null)
@@ -18,12 +18,12 @@ function CohortChart() {
     <div
       ref={ref}
       role="img"
-      aria-label={`Unit chart with ${COHORT} cells, one per student in the cohort. The top 4 percent are highlighted.`}
+      aria-label={`Unit chart with ${CELLS} cells, each standing for one percent of the cohort. The top ${TOP_PERCENT} percent are highlighted.`}
       className={`cohort ${inView ? 'is-on' : ''}`}
       style={{ gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))` }}
     >
-      {Array.from({ length: COHORT }, (_, i) => (
-        <span key={i} className={`cohort-cell ${i < TOP_4_PERCENT ? 'is-lit' : ''}`} style={{ '--i': i }} />
+      {Array.from({ length: CELLS }, (_, i) => (
+        <span key={i} className={`cohort-cell ${i < TOP_PERCENT ? 'is-lit' : ''}`} style={{ '--i': i }} />
       ))}
     </div>
   )
@@ -50,12 +50,13 @@ export default function About() {
           className="md:col-span-5 md:row-span-2"
           innerClassName="flex flex-col justify-between gap-10 p-7 md:p-9"
         >
-          <div>
+          {/* The figure is sized from the width of its tile, so it never spills out of it. */}
+          <div style={{ containerType: 'inline-size' }}>
             <p className="text-solid-mute">CGPA</p>
-            <p className="figure mt-3 text-[8rem] sm:text-[10rem]">
+            <p className="figure mt-3" style={{ fontSize: 'clamp(4rem, 52cqw, 10rem)' }}>
               <CountUp to={about.cgpa.value} decimals={2} />
               <span
-                className="ml-3 text-4xl font-semibold tracking-normal text-solid-mute sm:text-5xl"
+                className="ml-[0.075em] text-[0.3em] font-semibold tracking-normal text-solid-mute"
                 style={{ fontStretch: '100%' }}
               >
                 /{about.cgpa.outOf}
@@ -70,7 +71,11 @@ export default function About() {
 
         <Tile className="md:col-span-7" innerClassName="p-7 md:p-9">
           <p className="max-w-[40ch] text-[1.5rem] leading-[1.25] font-medium tracking-tight">{about.body[0]}</p>
-          <p className="mt-6 max-w-[52ch] text-graphite">{about.body[1]}</p>
+          {about.body.slice(1).map((text) => (
+            <p key={text} className="mt-6 max-w-[52ch] text-graphite">
+              {text}
+            </p>
+          ))}
         </Tile>
 
         <Tile className="md:col-span-12" innerClassName="p-7 md:p-9">
