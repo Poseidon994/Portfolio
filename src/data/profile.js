@@ -16,7 +16,7 @@ export const profile = {
     linkedin: 'https://www.linkedin.com/in/om-bharadwaj-916b802a5/',
     kaggle: 'https://www.kaggle.com/ombharadwaj994',
     leetcode: 'https://leetcode.com/u/Poseidon994/',
-    resume: `${base}Om_Bharadwaj_Resume_V7_Natoe.pdf`,
+    resume: `${base}Om_Bharadwaj_Resume_V9.pdf`,
   },
 }
 
